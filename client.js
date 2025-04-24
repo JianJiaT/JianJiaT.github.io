@@ -3,18 +3,9 @@ let txtArray = []
 const serverUrl = "https://jjt.pythonanywhere.com"
 
 $(document).ready(function() {
-    hideInputForms();
     addInfoHandlers();
-    hideInfoBoxes();
     addSelectorHandlers();
 })
-
-function hideInputForms() {
-    let inputforms = document.querySelectorAll(".inputform");
-    for (inputform of inputforms) {
-        inputform.style.display = "none";
-    }
-}
 
 function hideInputForm(inputform) {
     inputform.style.display = "none";
@@ -63,13 +54,6 @@ function findRelatedBox(infoicon) {
     let infoboxId = `${id}box`;
     let infobox = document.querySelector(`#${infoboxId}`);
     return infobox
-}
-
-function hideInfoBoxes() {
-    let infoboxes = document.querySelectorAll(".infobox");
-    for (infobox of infoboxes) {
-        infobox.style.display = "none";
-    }
 }
 
 function addSelectorHandlers() {
