@@ -473,11 +473,7 @@ $("#clearer").on("click", function() {
 })
 
 $("#getter").on("click", function() {
-    $.get( "http://127.0.0.1:5000/hello", function( data ) {
+    $.get( "https://jjt.pythonanywhere.com/hello", function( data ) {
         $( "body" ).append(data);
     });
-    $.get( "http://127.0.0.1:5000/data", function( data ) {
-        $( "body" ).append(data);
-    });
-    window.location.assign("custom.html")
 });
