@@ -456,9 +456,3 @@ $("#clearer").on("click", function() {
         location.reload()
     }
 })
-
-$("#getter").on("click", function() {
-    $.get( `${serverUrl}/hello`, function( data ) {
-        $( "body" ).append(data);
-    });
-});
