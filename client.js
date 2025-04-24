@@ -1,5 +1,6 @@
 let csvArray = []
 let txtArray = []
+const serverUrl = "https://jjt.pythonanywhere.com"
 
 $(document).ready(function() {
     hideInputForms();
@@ -182,7 +183,7 @@ $("#viewer").on("click", function(event) {
 
     $.ajax({
         type: 'POST',
-        url: `http://127.0.0.1:5000/view`,
+        url: `${serverUrl}/view`,
         data: formData,
         contentType: false,
         cache: false,
@@ -282,7 +283,7 @@ $("#customform").on("submit", function(event) {
     formData.set("rulecsv", ruleCsv);
     $.ajax({
         type: "POST",
-        url: `http://127.0.0.1:5000/apply`,
+        url: `${serverUrl}/apply`,
         data: formData,
         contentType: false,
         cache: false,
@@ -336,7 +337,7 @@ $("#emailform").on("submit", function(event) {
 
     $.ajax({
         type: "POST",
-        url: `http://127.0.0.1:5000/email`,
+        url: `${serverUrl}/email`,
         data: formData,
         contentType: false,
         cache: false,
@@ -381,7 +382,7 @@ $("#phoneform").on("submit", function(event) {
 
     $.ajax({
         type: "POST",
-        url: `http://127.0.0.1:5000/phone`,
+        url: `${serverUrl}/phone`,
         data: formData,
         contentType: false,
         cache: false,
@@ -416,7 +417,7 @@ $("#postalform").on("submit", function(event) {
 
     $.ajax({
         type: "POST",
-        url: `http://127.0.0.1:5000/postal`,
+        url: `${serverUrl}/postal`,
         data: formData,
         contentType: false,
         cache: false,
@@ -473,7 +474,7 @@ $("#clearer").on("click", function() {
 })
 
 $("#getter").on("click", function() {
-    $.get( "https://jjt.pythonanywhere.com/hello", function( data ) {
+    $.get( `${serverUrl}/hello`, function( data ) {
         $( "body" ).append(data);
     });
 });
