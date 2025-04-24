@@ -473,7 +473,7 @@ $("#clearer").on("click", function() {
 })
 
 $("#getter").on("click", function() {
-    $.get( "http://jjt.pythonanywhere.com/hello", function( data ) {
+    $.get( "https://jjt.pythonanywhere.com/hello", function( data ) {
         $( "body" ).append(data);
     });
 });
