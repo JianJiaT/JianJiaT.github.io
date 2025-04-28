@@ -242,49 +242,6 @@ function toggleInputForm(inputform) {
     }
 }
 
-$("#customform").on("submit", function(event) {
-    event.preventDefault();
-    let formData = new FormData($('#customform')[0]);
-    let dataCsvFn = formData.get("datacsv");
-    let anchor = document.querySelector("#datacsv");
-    if (dataCsvFn === null || !dataCsvFn.includes(".csv")) {
-        placeErrorMessage("Please select a data CSV", anchor);
-        return;
-    } else {
-        removeErrorMessage(anchor);
-    }
-    let dataCsv = getFile(dataCsvFn, csvArray, "csvfile");
-    formData.set("datacsv", dataCsv);
-    let ruleCsvFn = formData.get("rulecsv");
-    anchor = document.querySelector("#rulecsv");
-    if (ruleCsvFn === null || !ruleCsvFn.includes(".csv")) {
-        placeErrorMessage("Please select a rule CSV", anchor);
-        return;
-    } else {
-        removeErrorMessage(anchor);
-    }
-    let ruleCsv = getFile(ruleCsvFn,csvArray, "csvfile");
-    formData.set("rulecsv", ruleCsv);
-    $.ajax({
-        type: "POST",
-        url: `${serverUrl}/apply`,
-        data: formData,
-        contentType: false,
-        cache: false,
-        processData: false,
-        success: function(response) {
-            updateCsv(response, dataCsvFn, csvArray);
-            let anchor = document.querySelector("#customformloader");
-            removeErrorMessage(anchor);
-        },
-        error: function(jqxhr) {
-            let anchor = document.querySelector("#customformloader");
-            placeErrorMessage(jqxhr.responseText, anchor);
-        },
-    });
-    resetInputForm(customform);
-})
-
 $("#emailform").on("submit", function(event) {
     event.preventDefault();
     let formData = new FormData($('#emailform')[0]);
@@ -418,6 +375,49 @@ $("#postalform").on("submit", function(event) {
     });
 
     resetInputForm(postalform);
+})
+
+$("#customform").on("submit", function(event) {
+    event.preventDefault();
+    let formData = new FormData($('#customform')[0]);
+    let dataCsvFn = formData.get("datacsv");
+    let anchor = document.querySelector("#datacsv");
+    if (dataCsvFn === null || !dataCsvFn.includes(".csv")) {
+        placeErrorMessage("Please select a data CSV", anchor);
+        return;
+    } else {
+        removeErrorMessage(anchor);
+    }
+    let dataCsv = getFile(dataCsvFn, csvArray, "csvfile");
+    formData.set("datacsv", dataCsv);
+    let ruleCsvFn = formData.get("rulecsv");
+    anchor = document.querySelector("#rulecsv");
+    if (ruleCsvFn === null || !ruleCsvFn.includes(".csv")) {
+        placeErrorMessage("Please select a rule CSV", anchor);
+        return;
+    } else {
+        removeErrorMessage(anchor);
+    }
+    let ruleCsv = getFile(ruleCsvFn,csvArray, "csvfile");
+    formData.set("rulecsv", ruleCsv);
+    $.ajax({
+        type: "POST",
+        url: `${serverUrl}/apply`,
+        data: formData,
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function(response) {
+            updateCsv(response, dataCsvFn, csvArray);
+            let anchor = document.querySelector("#customformloader");
+            removeErrorMessage(anchor);
+        },
+        error: function(jqxhr) {
+            let anchor = document.querySelector("#customformloader");
+            placeErrorMessage(jqxhr.responseText, anchor);
+        },
+    });
+    resetInputForm(customform);
 })
 
 function updateCsv(responseData, csvFn, csvArray) {
