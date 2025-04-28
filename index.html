@@ -121,11 +121,21 @@
       <select class="txtselector" name="domaintxt" id="domaintxt">
         <option value="txtplaceholder" disabled selected>Select a TXT</option>
       </select>
+      <span class="info" id="domaintxtinfo">?</span>
+      <p class="infobox" id="domaintxtinfobox">
+        <span>TXT file containing comma-separated domains e.g. .com, .org, .net</span> <br>
+      </p>
       <br>
       <label for="separatortxt">Select TXT containing separators</label>
       <select class="txtselector" name="separatortxt" id="separatortxt">
         <option value="txtplaceholder" disabled selected>Select a TXT</option>
       </select>
+      <span class="info" id="separatortxtinfo">?</span>
+      <p class="infobox" id="separatortxtinfobox">
+        <span>TXT file containing comma-separated <strong>and double quotation mark ("") enclosed</strong> domains e.g. ",", ";", " "</span> <br>
+        <br>
+        <span>Whitespace will be generalised, that is spaces, tabs and newlines will all cause all whitespace to be treated as a separator</span> <br>
+      </p>
       <br>
       <label for="stuckemails">Name of column with jumbled emails (case-sensitive):</label>
       <input type="text" name="stuckemails" id="stuckemails" required>
@@ -144,6 +154,12 @@
       <select class="txtselector" name="areatxt" id="areatxt">
         <option value="txtplaceholder" disabled selected>Select a TXT</option>
       </select>
+      <span class="info" id="areatxtinfo">?</span>
+      <p class="infobox" id="areatxtinfobox">
+        <span>TXT file containing comma-separated area codes e.g. 123, 456, 78</span> <br>
+        <br>
+        <span>Placeholders as input below can also be used in the area codes</span> <br>
+      </p>
       <br>
       <label for="countrycode">Country code:</label>
       <input type="number" name="countrycode" id="countrycode" required>
