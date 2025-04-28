@@ -74,6 +74,7 @@
       <label for="txtfileloader">Load TXT File</label>
       <input id="txtfileloader" name="txtfile" type="file" accept=".txt" onchange="loadTxtFile(this)">
     </form>
+    <br>
     <select class="csvselector" name="csvs" id="csvs">
       <option value="csvplaceholder" disabled selected>Select a CSV</option>
     </select> <br>
@@ -107,6 +108,111 @@
     <br>
     <table id="viewedcsv"></table>
     <button id="saver">Save Selected CSV</button>
+    <br>
+    <br>
+    <button id="emailformloader">Apply Email Splitting</button>
+    <form class="inputform" id="emailform">
+      <label for="emaildatacsv">Select CSV containing emails</label>
+      <select class="csvselector" name="emaildatacsv" id="emaildatacsv">
+        <option value="csvplaceholder" disabled selected>Select a CSV</option>
+      </select>
+      <br>
+      <label for="domaintxt">Select TXT containing email domains</label>
+      <select class="txtselector" name="domaintxt" id="domaintxt">
+        <option value="txtplaceholder" disabled selected>Select a TXT</option>
+      </select>
+      <br>
+      <label for="separatortxt">Select TXT containing separators</label>
+      <select class="txtselector" name="separatortxt" id="separatortxt">
+        <option value="txtplaceholder" disabled selected>Select a TXT</option>
+      </select>
+      <br>
+      <label for="stuckemails">Name of column with jumbled emails (case-sensitive):</label>
+      <input type="text" name="stuckemails" id="stuckemails" required>
+      <br>
+      <input type="submit" value="Apply">
+    </form>
+    <br>
+    <button id="phoneformloader">Apply Phone Cleaning</button>
+    <form class="inputform" id="phoneform">
+      <label for="phonedatacsv">Select CSV containing phone numbers</label>
+      <select class="csvselector" name="phonedatacsv" id="phonedatacsv">
+        <option value="csvplaceholder" disabled selected>Select a CSV</option>
+      </select>
+      <br>
+      <label for="areatxt">Select TXT containing area codes</label>
+      <select class="txtselector" name="areatxt" id="areatxt">
+        <option value="txtplaceholder" disabled selected>Select a TXT</option>
+      </select>
+      <br>
+      <label for="countrycode">Country code:</label>
+      <input type="number" name="countrycode" id="countrycode" required>
+      <br>
+      <label for="phonenumcol">Name of column with phone numbers (case-sensitive):</label>
+      <input type="text" name="phonenumcol" id="phonenumcol" required>
+      <br>
+      <label for="phoneplaceholdermandatory">Placeholder for mandatory digits:</label>
+      <input type="text" name="phoneplaceholdermandatory" id="phoneplaceholdermandatory" required>
+      <span class="info" id="phoneplaceholdermandatoryinfo">?</span>
+      <p class="infobox" id="phoneplaceholdermandatoryinfobox">
+        <span>If placeholders are used in area codes, the same placeholder should be used here</span> <br>
+      </p>
+      <br>
+      <label for="phoneplaceholderoptional">Placeholder for optional digits:</label>
+      <input type="text" name="phoneplaceholderoptional" id="phoneplaceholderoptional" required>
+      <br>
+      <label for="phonenumformat">Format:</label>
+      <input type="text" name="phonenumformat" id="phonenumformat" required>
+      <span class="info" id="phonenumformatinfo">?</span>
+      <p class="infobox" id="phonenumformatinfobox">
+        <span>Input the format for valid phone numbers, making use of the placeholders defined above.</span> <br>
+        <span>The format will be combined with the country code and area codes.</span> <br>
+        <br>
+        <span>For instance, using "A" for mandatory digits and "B" for optional ones, the format AAAAABBB indicates the number can be 5 to 8 digits long.</span> <br>
+        <span>Suppose the country code is "12" and valid area codes are "34, 56", then the final valid phone number format will be +1234 or +1256 followed by 5 to 8 digits.</span> <br>
+        <span>Area codes can use placeholders too, so if an area code were "7A", then another valid format would be +127 followed by 6 to 9 digits.</span> <br>
+        <br>
+        <span>Letters can also be included: lowercase for optional, uppercase for mandatory.</span> <br>
+        <span>This is most relevant for their inclusion in optional extensions.</span> <br>
+        <span>To indicate that a sequence is optional, such as for extensions, enclose it in round brackets ().</span> <br>
+        <br>
+        <span>Extending the example above, the format AAAAABBB(XABB) indicates the number can be 5 to 8 digits long and can be followed by an extension.</span> <br>
+        <span>If the extension is present, it will begin with an "X" and will be 1 to 3 digits long.</span>
+      </p>
+      <br>
+      <input type="submit" value="Apply">
+    </form>
+    <br>
+    <button id="postalformloader">Apply Postal Code Cleaning</button>
+    <form class="inputform" id="postalform">
+      <label for="postaldatacsv">Select CSV containing postal codes</label>
+      <select class="csvselector" name="postaldatacsv" id="postaldatacsv">
+        <option value="csvplaceholder" disabled selected>Select a CSV</option>
+      </select>
+      <br>
+      <label for="postalcol">Name of column with postal codes (case-sensitive):</label>
+      <input type="text" name="postalcol" id="postalcol" required>
+      <br>
+      <label for="postalformat">Format (letters and numbers will be generalised, () for optional chunk):</label>
+      <input type="text" name="postalformat" id="postalformat" required>
+      <span class="info" id="postalnumformatinfo">?</span>
+      <p class="infobox" id="postalnumformatinfobox">
+        <span>Input the format for valid postal codes, using letters and digits.</span> <br>
+        <span>All letters and digits will be generalised to represent any letter or digit respectively.</span> <br>
+        <br>
+        <span>For instance, A1A1A1, z0z0z0 and A1b2p6 all mean the same thing: the valid postal code format is 6 characters long, beginning with a letter and alternating between letters and digits.</span> <br>
+        <br>
+        <span>To indicate that a sequence is optional, enclose it in round brackets ().</span> <br>
+        <br>
+        <span>For instance, 123456(7) indicates that a postal code has 6 or 7 digits.</span> <br>
+        <br>
+        <span>To prevent the generalisation of a character, put a asterisk (*) before it. The character will then be required to be present in the postal code.</span> <br>
+        <br>
+        <span>For instance, *11111*9 indicates that a postal code has 6 digits, starts with "1" and ends with "9".</span>
+      </p>
+      <br>
+      <input type="submit" value="Apply">
+    </form>
     <br>
     <button id="customformloader">Apply Custom Rule</button>
     <form class="inputform" id="customform">
@@ -175,109 +281,6 @@
       <input type="submit" value="Apply">
     </form>
     <br>
-    <button id="emailformloader">Apply Email Rule</button>
-    <form class="inputform" id="emailform">
-      <label for="emaildatacsv">Select CSV containing emails</label>
-      <select class="csvselector" name="emaildatacsv" id="emaildatacsv">
-        <option value="csvplaceholder" disabled selected>Select a CSV</option>
-      </select>
-      <br>
-      <label for="domaintxt">Select TXT containing email domains</label>
-      <select class="txtselector" name="domaintxt" id="domaintxt">
-        <option value="txtplaceholder" disabled selected>Select a TXT</option>
-      </select>
-      <br>
-      <label for="separatortxt">Select TXT containing separators</label>
-      <select class="txtselector" name="separatortxt" id="separatortxt">
-        <option value="txtplaceholder" disabled selected>Select a TXT</option>
-      </select>
-      <br>
-      <label for="stuckemails">Name of column with jumbled emails (case-sensitive):</label>
-      <input type="text" name="stuckemails" id="stuckemails" required>
-      <br>
-      <input type="submit" value="Apply">
-    </form>
-    <br>
-    <button id="phoneformloader">Apply Phone Rule</button>
-    <form class="inputform" id="phoneform">
-      <label for="phonedatacsv">Select CSV containing phone numbers</label>
-      <select class="csvselector" name="phonedatacsv" id="phonedatacsv">
-        <option value="csvplaceholder" disabled selected>Select a CSV</option>
-      </select>
-      <br>
-      <label for="areatxt">Select TXT containing area codes</label>
-      <select class="txtselector" name="areatxt" id="areatxt">
-        <option value="txtplaceholder" disabled selected>Select a TXT</option>
-      </select>
-      <br>
-      <label for="countrycode">Country code:</label>
-      <input type="number" name="countrycode" id="countrycode" required>
-      <br>
-      <label for="phonenumcol">Name of column with phone numbers (case-sensitive):</label>
-      <input type="text" name="phonenumcol" id="phonenumcol" required>
-      <br>
-      <label for="phoneplaceholdermandatory">Placeholder for mandatory digits:</label>
-      <input type="text" name="phoneplaceholdermandatory" id="phoneplaceholdermandatory" required>
-      <span class="info" id="phoneplaceholdermandatoryinfo">?</span>
-      <p class="infobox" id="phoneplaceholdermandatoryinfobox">
-        <span>If placeholders are used in area codes, the same placeholder should be used here</span> <br>
-      </p>
-      <br>
-      <label for="phoneplaceholderoptional">Placeholder for optional digits:</label>
-      <input type="text" name="phoneplaceholderoptional" id="phoneplaceholderoptional" required>
-      <br>
-      <label for="phonenumformat">Format:</label>
-      <input type="text" name="phonenumformat" id="phonenumformat" required>
-      <span class="info" id="phonenumformatinfo">?</span>
-      <p class="infobox" id="phonenumformatinfobox">
-        <span>Input the format for valid phone numbers, making use of the placeholders defined above.</span> <br>
-        <span>The format will be combined with the country code and area codes.</span> <br>
-        <br>
-        <span>For instance, using "A" for mandatory digits and "B" for optional ones, the format AAAAABBB indicates the number can be 5 to 8 digits long.</span> <br>
-        <span>Suppose the country code is "12" and valid area codes are "34, 56", then the final valid phone number format will be +1234 or +1256 followed by 5 to 8 digits.</span> <br>
-        <span>Area codes can use placeholders too, so if an area code were "7A", then another valid format would be +127 followed by 6 to 9 digits.</span> <br>
-        <br>
-        <span>Letters can also be included: lowercase for optional, uppercase for mandatory.</span> <br>
-        <span>This is most relevant for their inclusion in optional extensions.</span> <br>
-        <span>To indicate that a sequence is optional, such as for extensions, enclose it in round brackets ().</span> <br>
-        <br>
-        <span>Extending the example above, the format AAAAABBB(XABB) indicates the number can be 5 to 8 digits long and can be followed by an extension.</span> <br>
-        <span>If the extension is present, it will begin with an "X" and will be 1 to 3 digits long.</span>
-      </p>
-      <br>
-      <input type="submit" value="Apply">
-    </form>
-    <br>
-    <button id="postalformloader">Apply Postal Rule</button>
-    <form class="inputform" id="postalform">
-      <label for="postaldatacsv">Select CSV containing postal codes</label>
-      <select class="csvselector" name="postaldatacsv" id="postaldatacsv">
-        <option value="csvplaceholder" disabled selected>Select a CSV</option>
-      </select>
-      <br>
-      <label for="postalcol">Name of column with postal codes (case-sensitive):</label>
-      <input type="text" name="postalcol" id="postalcol" required>
-      <br>
-      <label for="postalformat">Format (letters and numbers will be generalised, () for optional chunk):</label>
-      <input type="text" name="postalformat" id="postalformat" required>
-      <span class="info" id="postalnumformatinfo">?</span>
-      <p class="infobox" id="postalnumformatinfobox">
-        <span>Input the format for valid postal codes, using letters and digits.</span> <br>
-        <span>All letters and digits will be generalised to represent any letter or digit respectively.</span> <br>
-        <br>
-        <span>For instance, A1A1A1, z0z0z0 and A1b2p6 all mean the same thing: the valid postal code format is 6 characters long, beginning with a letter and alternating between letters and digits.</span> <br>
-        <br>
-        <span>To indicate that a sequence is optional, enclose it in round brackets ().</span> <br>
-        <br>
-        <span>For instance, 123456(7) indicates that a postal code has 6 or 7 digits.</span> <br>
-        <br>
-        <span>To prevent the generalisation of a character, put a asterisk (*) before it. The character will then be required to be present in the postal code.</span> <br>
-        <br>
-        <span>For instance, *11111*9 indicates that a postal code has 6 digits, starts with "1" and ends with "9".</span>
-      </p>
-      <br>
-      <input type="submit" value="Apply">
-    </form>
     <br>
     <button id="clearer">Clear</button>
     <br>
