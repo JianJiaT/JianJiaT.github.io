@@ -278,6 +278,21 @@
         <span>QRS from the example above, from the rule CSV</span> <br>
       </p>
       <br>
+      <span>View example</span>
+      <span class="info" id="customexampleinfo">?</span>
+      <p class="infobox" id="customexampleinfobox">
+        <span>Suppose we have the data CSV below.</span> <br>
+        <img src="data.jpg" width="300" height="128.4"> <br>
+        <span>We wish to fill in the cells in the "area" column based on the values in the "postal" column, which represents how postal codes can encode location. In particular, in our case it is the 3 middle digits of the postal code that encode the area.</span> <br>
+        <br>
+        <span>We would provide the rule CSV below...</span> <br>
+        <img src="code.jpg" width="170.8" heigth="158.3"> <br>
+        <span>...and fill in the form as follows.</span>
+        <img src="form.jpg" width="300" height="96.7"> <br>
+        <span>Once we click "Apply", we can see that those rows whose "postal" correctly encode "area" will have the corresponding value filled in.</span>
+        <img src="result.jpg" width="300" height="128.4"> <br>
+      </p>
+      <br>
       <input type="submit" value="Apply">
     </form>
     <br>
