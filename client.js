@@ -27,7 +27,10 @@ function addInfoHandlers() {
 function showRelatedBox(infoicon) {
     let infobox = findRelatedBox(infoicon);
     if (!infobox.classList.contains("fixed")) {
+        let currXOffset = window.pageXOffset;
+        let currYOffset = window.pageYOffset;
         infobox.style.display = "inline-block";
+        window.scrollTo(currXOffset, currYOffset);
     }
 }
 
