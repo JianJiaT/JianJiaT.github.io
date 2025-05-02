@@ -66,9 +66,12 @@
     <span>The icon on the right indicates additional information/documentation. Hover over it to show, click it to pin/unpin</span>
     <span class="info" id="introinfo">?</span>
     <p class="infobox" id="introinfobox">Good job!</p>
+    <br>
+    <span>Excel (.xlsx) files can be used where csv files are expected</span>
+    <br>
     <form id="csvfileloaderform" method="post" enctype="multipart/form-data">
       <label for="csvfileloader">Load CSV File</label>
-      <input id="csvfileloader" name="csvfile" type="file" accept=".csv" onchange="loadCsvFile(this)">
+      <input id="csvfileloader" name="csvfile" type="file" accept=".csv, .xlsx" onchange="loadCsvFile(this)">
     </form>
     <form id="txtfileloaderform" method="post" enctype="multipart/form-data">
       <label for="txtfileloader">Load TXT File</label>

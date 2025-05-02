@@ -89,17 +89,28 @@ function appendOptionToSelector(option, selector) {
     selector.appendChild(newop);
 }
 
+function checkIsCsvOrExcel(fn) {
+    const csvOrExcelExtensions = [".csv", ".xlsx"];
+    for (extension of csvOrExcelExtensions) {
+        if (fn.includes(extension)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function loadCsvFile(input) {
     let file = input.files[0]; // get first file in multi-select
     let anchor = document.querySelector("#csvfileloader");
-    if (file.type != "text/csv") {
+
+    let fn = file.name;
+    if (!checkIsCsvOrExcel) {
         placeErrorMessage("Please load a CSV file", anchor);
         return;
     } else {
         removeErrorMessage(anchor);
     }
 
-    let fn = file.name;
     if (csvArray.includes(fn)) {
         placeErrorMessage("This CSV file is already loaded", anchor);
         return;
@@ -157,7 +168,7 @@ $("#viewer").on("click", function(event) {
     event.preventDefault();
     let fn = $("#csvs").val();
     let anchor = document.querySelector("#viewedcsvtoggler");
-    if (fn === null || !fn.includes(".csv")) {
+    if (fn === null || !checkIsCsvOrExcel(fn)) {
         placeErrorMessage("Please select a CSV file to view", anchor);
         return;
     } else {
@@ -202,7 +213,7 @@ $("#viewedcsvtoggler").on("click", function() {
 $("#saver").on("click", async function() {
     let fn = $("#csvs").val();
     let anchor = document.querySelector("#saver");
-    if (fn === null || !fn.includes(".csv")) {
+    if (fn === null || !checkIsCsvOrExcel(fn)) {
         placeErrorMessage("Please select a CSV file to save", anchor);
         return;
     } else {
@@ -210,9 +221,8 @@ $("#saver").on("click", async function() {
     }
 
     let data = getFile(fn, csvArray, "csvfile");
-    let dataAsText = await data.text();
     let downloadLink = document.createElement('a');
-    downloadLink.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(dataAsText));
+    downloadLink.setAttribute('href', URL.createObjectURL(data));
     downloadLink.setAttribute('download', fn);
     
     downloadLink.style.display = 'none';
@@ -245,12 +255,43 @@ function toggleInputForm(inputform) {
     }
 }
 
+function postUpdateForm(route, formData, csvFn, anchor) {
+    $.ajax({
+        type: "POST",
+        url: `http://127.0.0.1:5000/${route}`,
+        data: formData,
+        contentType: false,
+        cache: false,
+        processData: false,
+        xhr: function() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 2) { // received response headers
+                    if (xhr.status == 200) {
+                        xhr.responseType = "blob"; // read response as file
+                    } else {
+                        xhr.responseType = "text"; // read response error message
+                    }
+                }
+            };
+            return xhr;
+        },
+        success: function(response) {
+            updateCsv(response, csvFn, csvArray);
+            removeErrorMessage(anchor);
+        },
+        error: function(jqxhr) {
+            placeErrorMessage(jqxhr.responseText, anchor);
+        },
+    });
+}
+
 $("#emailform").on("submit", function(event) {
     event.preventDefault();
     let formData = new FormData($('#emailform')[0]);
     let emailCsvFn = formData.get("emaildatacsv");
     let anchor = document.querySelector("#emaildatacsv");
-    if (emailCsvFn === null || !emailCsvFn.includes(".csv")) {
+    if (emailCsvFn === null || !checkIsCsvOrExcel(emailCsvFn)) {
         placeErrorMessage("Please select an email CSV", anchor);
         return;
     } else {
@@ -279,23 +320,8 @@ $("#emailform").on("submit", function(event) {
     let separatorTxt = getFile(separatorTxtFn, txtArray, "txtfile");
     formData.set("separatortxt", separatorTxt);
 
-    $.ajax({
-        type: "POST",
-        url: `${serverUrl}/email`,
-        data: formData,
-        contentType: false,
-        cache: false,
-        processData: false,
-        success: function(response) {
-            updateCsv(response, emailCsvFn, csvArray);
-            let anchor = document.querySelector("#emailformloader");
-            removeErrorMessage(anchor);
-        },
-        error: function(jqxhr) {
-            let anchor = document.querySelector("#emailformloader");
-            placeErrorMessage(jqxhr.responseText, anchor);
-        },
-    });
+    anchor = document.querySelector("#emailformloader");
+    postUpdateForm("email", formData, emailCsvFn, anchor);
 
     resetInputForm(emailform);
 })
@@ -305,7 +331,7 @@ $("#phoneform").on("submit", function(event) {
     let formData = new FormData($('#phoneform')[0]);
     let phoneCsvFn = formData.get("phonedatacsv");
     let anchor = document.querySelector("#phonedatacsv");
-    if (phoneCsvFn === null || !phoneCsvFn.includes(".csv")) {
+    if (phoneCsvFn === null || !checkIsCsvOrExcel(phoneCsvFn)) {
         placeErrorMessage("Please select a phone CSV", anchor);
         return;
     } else {
@@ -324,23 +350,8 @@ $("#phoneform").on("submit", function(event) {
     let areaTxt = getFile(areaTxtFn, txtArray, "txtfile");
     formData.set("areatxt", areaTxt);
 
-    $.ajax({
-        type: "POST",
-        url: `${serverUrl}/phone`,
-        data: formData,
-        contentType: false,
-        cache: false,
-        processData: false,
-        success: function(response) {
-            updateCsv(response, phoneCsvFn, csvArray);
-            let anchor = document.querySelector("#phoneformloader");
-            removeErrorMessage(anchor);
-        },
-        error: function(jqxhr) {
-            let anchor = document.querySelector("#phoneformloader");
-            placeErrorMessage(jqxhr.responseText, anchor);
-        },
-    });
+    anchor = document.querySelector("#phoneformloader");
+    postUpdateForm("phone", formData, phoneCsvFn, anchor);
 
     resetInputForm(phoneform);
 })
@@ -350,7 +361,7 @@ $("#postalform").on("submit", function(event) {
     let formData = new FormData($('#postalform')[0]);
     let postalCsvFn = formData.get("postaldatacsv");
     let anchor = document.querySelector("#postaldatacsv");
-    if (postalCsvFn === null || !postalCsvFn.includes(".csv")) {
+    if (postalCsvFn === null || !checkIsCsvOrExcel(postalCsvFn)) {
         placeErrorMessage("Please select a postal CSV", anchor);
         return;
     } else {
@@ -359,23 +370,8 @@ $("#postalform").on("submit", function(event) {
     let postalCsv = getFile(postalCsvFn, csvArray, "csvfile");
     formData.set("postaldatacsv", postalCsv);
 
-    $.ajax({
-        type: "POST",
-        url: `${serverUrl}/postal`,
-        data: formData,
-        contentType: false,
-        cache: false,
-        processData: false,
-        success: function(response) {
-            updateCsv(response, postalCsvFn, csvArray);
-            let anchor = document.querySelector("#postalformloader");
-            removeErrorMessage(anchor);
-        },
-        error: function(jqxhr) {
-            let anchor = document.querySelector("#postalformloader");
-            placeErrorMessage(jqxhr.responseText, anchor);
-        },
-    });
+    anchor = document.querySelector("#postalformloader");
+    postUpdateForm("postal", formData, postalCsvFn, anchor);
 
     resetInputForm(postalform);
 })
@@ -403,28 +399,21 @@ $("#customform").on("submit", function(event) {
     }
     let ruleCsv = getFile(ruleCsvFn,csvArray, "csvfile");
     formData.set("rulecsv", ruleCsv);
-    $.ajax({
-        type: "POST",
-        url: `${serverUrl}/apply`,
-        data: formData,
-        contentType: false,
-        cache: false,
-        processData: false,
-        success: function(response) {
-            updateCsv(response, dataCsvFn, csvArray);
-            let anchor = document.querySelector("#customformloader");
-            removeErrorMessage(anchor);
-        },
-        error: function(jqxhr) {
-            let anchor = document.querySelector("#customformloader");
-            placeErrorMessage(jqxhr.responseText, anchor);
-        },
-    });
+
+    anchor = document.querySelector("#customformloader");
+    postUpdateForm("apply", formData, dataCsvFn, anchor);
+
     resetInputForm(customform);
 })
 
 function updateCsv(responseData, csvFn, csvArray) {
-    let newCsv = new File([responseData], csvFn, {type: "text/csv"});
+    let fileType = "";
+    if (csvFn.includes(".csv")) {
+        fileType = "text/csv"
+    } else {
+        fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    }
+    let newCsv = new File([responseData], csvFn, {type: fileType});
     let dataCsvIndex = csvArray.findIndex(({name}) => name === csvFn);
     let newFormData = new FormData();
     newFormData.append("csvfile", newCsv);
