@@ -261,7 +261,7 @@ function toggleInputForm(inputform) {
 function postUpdateForm(route, formData, csvFn, anchor) {
     $.ajax({
         type: "POST",
-        url: `http://127.0.0.1:5000/${route}`,
+        url: `${serverUrl}/${route}`,
         data: formData,
         contentType: false,
         cache: false,
