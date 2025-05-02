@@ -111,7 +111,7 @@ function loadCsvFile(input) {
         removeErrorMessage(anchor);
     }
 
-    if (csvArray.includes(fn)) {
+    if (getFile(fn, csvArray, "csvfile")) {
         placeErrorMessage("This CSV file is already loaded", anchor);
         return;
     } else {
@@ -139,7 +139,7 @@ function loadTxtFile(input) {
     }
 
     let fn = file.name;
-    if (csvArray.includes(fn)) {
+    if (getFile(fn, txtArray, "txtfile")) {
         placeErrorMessage("This TXT file is already loaded", anchor);
         return;
     } else {
@@ -157,7 +157,10 @@ function loadTxtFile(input) {
 }
 
 function getFile(fn, fileArray, fileType) {
-    return fileArray.find(({name}) => name === fn).data.get(fileType);
+    if (fileArray.find(({name}) => name === fn)) {
+        return fileArray.find(({name}) => name === fn).data.get(fileType);
+    }
+    return null;
 }
 
 $("#viewformloader").on("click", function() {
