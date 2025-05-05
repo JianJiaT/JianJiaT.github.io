@@ -234,6 +234,27 @@ $("#saver").on("click", async function() {
     document.body.removeChild(downloadLink);
 })
 
+$("#deleter").on("click", function() {
+    let fn = $("#csvs").val();
+    let selectors = document.querySelectorAll("select");
+    for (selector of selectors) {
+        if (selector.value == fn) {
+            selector.value = "csvplaceholder";
+        }
+    }
+    let options = document.querySelectorAll(`option[value="${fn}"]`);
+    for (option of options) {
+        option.remove();
+    }
+    let csvIndex = csvArray.findIndex(({name}) => name === fn);
+    csvArray.splice(csvIndex, 1);
+    let csvLoader = document.querySelector("#csvfileloader");
+    let loaderFn = csvLoader.value.split("\\")[2]; // 2 since file name is prepended with "C:\fakepath\"
+    if (loaderFn == fn) {
+        csvLoader.value = null;
+    }
+})
+
 $("#customformloader").on("click", function() {
     toggleInputForm(customform);
 })
